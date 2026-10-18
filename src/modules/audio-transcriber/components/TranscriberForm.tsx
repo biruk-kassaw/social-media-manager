@@ -54,21 +54,21 @@ export function TranscriberForm({ onSubmit, isLoading }: TranscriberFormProps) {
   };
 
   return (
-    <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 sm:p-8 backdrop-blur-xl shadow-xl shadow-black/20">
-      <div className="flex items-center justify-between mb-6">
+    <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 sm:p-6 md:p-8 backdrop-blur-xl shadow-xl shadow-black/20">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-            <Video className="h-5 w-5 text-purple-400" />
+          <h3 className="text-base sm:text-lg font-semibold text-white flex items-center gap-2">
+            <Video className="h-5 w-5 text-purple-400 flex-shrink-0" />
             Media Input
           </h3>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-slate-400 mt-1">
             Submit a direct TikTok URL, mobile short link, or HTML embed code.
           </p>
         </div>
 
         {/* Engine selector */}
-        <div className="flex items-center gap-2 bg-slate-950/70 border border-slate-800 rounded-lg p-1">
-          <Cpu className="h-4 w-4 text-slate-400 ml-2" />
+        <div className="flex items-center gap-2 bg-slate-950/70 border border-slate-800 rounded-lg p-1 w-full sm:w-auto">
+          <Cpu className="h-4 w-4 text-slate-400 ml-2 flex-shrink-0" />
           <select
             value={provider}
             onChange={(e) =>
@@ -77,7 +77,7 @@ export function TranscriberForm({ onSubmit, isLoading }: TranscriberFormProps) {
               )
             }
             disabled={isLoading}
-            className="bg-transparent text-xs text-slate-200 font-medium py-1 px-2 focus:outline-none cursor-pointer"
+            className="bg-transparent text-xs text-slate-200 font-medium py-1 px-2 focus:outline-none cursor-pointer w-full sm:w-auto truncate"
           >
             <option value="gemini" className="bg-slate-900 text-slate-200">
               Google Gemini (gemini-3.8-flash)
@@ -162,15 +162,15 @@ export function TranscriberForm({ onSubmit, isLoading }: TranscriberFormProps) {
 
         {/* Amharic Tone & Style Selection */}
         <div className="pt-2 border-t border-slate-800/80">
-          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 flex items-center justify-between">
+          <div className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
             <span className="flex items-center gap-1.5 text-amber-300">
-              <Languages className="h-4 w-4" />
-              Amharic Script Localization Style (የአማርኛ ስክሪፕት አቀራረብ)
+              <Languages className="h-4 w-4 flex-shrink-0" />
+              Amharic Script Localization Style (የአማርኛ ስክሪፕት)
             </span>
             <span className="text-[11px] text-slate-500 font-normal">
               Two-step AI localization
             </span>
-          </label>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             <button
@@ -272,11 +272,11 @@ export function TranscriberForm({ onSubmit, isLoading }: TranscriberFormProps) {
         </div>
 
         {/* Submit action */}
-        <div className="pt-2 flex justify-end">
+        <div className="pt-2 flex flex-col sm:flex-row justify-end">
           <button
             type="submit"
             disabled={isLoading || !url.trim()}
-            className="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-medium text-sm shadow-lg shadow-purple-600/25 flex items-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-medium text-sm shadow-lg shadow-purple-600/25 flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             {isLoading ? (
               <>
@@ -285,9 +285,9 @@ export function TranscriberForm({ onSubmit, isLoading }: TranscriberFormProps) {
               </>
             ) : (
               <>
-                <Sparkles className="h-4 w-4" />
+                <Sparkles className="h-4 w-4 flex-shrink-0" />
                 <span>Extract Audio & Localize to Amharic</span>
-                <ArrowRight className="h-4 w-4 ml-1" />
+                <ArrowRight className="h-4 w-4 ml-1 flex-shrink-0" />
               </>
             )}
           </button>

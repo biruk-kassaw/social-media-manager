@@ -93,8 +93,8 @@ export default function AudioTranscriberPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8 pb-12">
-      {/* Intro hero banner */}
+    <div className="max-w-5xl mx-auto space-y-6 sm:space-y-8 pb-8 sm:pb-12">
+      {/* Media Input Form */}
 
 
       {/* Media Input Form */}

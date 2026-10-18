@@ -7,12 +7,12 @@ import {
   Clock,
   Sparkles,
   TrendingUp,
-  FileText,
-  Video,
   Layers,
   Flame,
+  X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useSidebar } from "../context/SidebarContext";
 
 interface NavItem {
   name: string;
@@ -59,15 +59,19 @@ const futureModules: NavItem[] = [
   },
 ];
 
-export function Sidebar() {
+function SidebarNavContent({ onClose }: { onClose?: () => void }) {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 border-r border-slate-800 bg-slate-950/70 backdrop-blur-xl flex flex-col justify-between h-screen sticky top-0">
-      <div>
+    <div className="flex flex-col justify-between h-full">
+      <div className="overflow-y-auto">
         {/* Brand header */}
-        <div className="p-6 border-b border-slate-800/80">
-          <Link href="/audio-transcriber" className="flex items-center gap-3">
+        <div className="p-5 sm:p-6 border-b border-slate-800/80 flex items-center justify-between">
+          <Link
+            href="/audio-transcriber"
+            onClick={onClose}
+            className="flex items-center gap-3"
+          >
             <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
               <Layers className="h-5 w-5 text-white" />
             </div>
@@ -81,6 +85,17 @@ export function Sidebar() {
               <p className="text-xs text-slate-400">Content Intelligence</p>
             </div>
           </Link>
+
+          {onClose && (
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close navigation"
+              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 border border-slate-800 transition-colors md:hidden cursor-pointer"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          )}
         </div>
 
         {/* Navigation */}
@@ -99,6 +114,7 @@ export function Sidebar() {
                   <Link
                     key={item.name}
                     href={item.href}
+                    onClick={onClose}
                     className={cn(
                       "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all group",
                       isActive
@@ -159,6 +175,38 @@ export function Sidebar() {
           </span>
         </div>
       </div>
-    </aside>
+    </div>
+  );
+}
+
+export function Sidebar() {
+  const { isOpen, close } = useSidebar();
+
+  return (
+    <>
+      {/* Mobile Drawer Backdrop */}
+      {isOpen && (
+        <div
+          onClick={close}
+          className="fixed inset-0 bg-black/75 backdrop-blur-sm z-40 md:hidden transition-opacity duration-300"
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Mobile Slide-Over Drawer */}
+      <aside
+        className={cn(
+          "fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-slate-950 border-r border-slate-800 shadow-2xl flex flex-col justify-between transition-transform duration-300 ease-in-out md:hidden",
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
+        <SidebarNavContent onClose={close} />
+      </aside>
+
+      {/* Desktop Sticky Sidebar */}
+      <aside className="hidden md:flex w-64 border-r border-slate-800 bg-slate-950/70 backdrop-blur-xl flex-col justify-between h-screen sticky top-0 flex-shrink-0 z-20">
+        <SidebarNavContent />
+      </aside>
+    </>
   );
 }

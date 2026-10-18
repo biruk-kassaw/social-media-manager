@@ -59,11 +59,11 @@ export function HistoryList({ jobs, onSelectJob }: HistoryListProps) {
         return (
           <div
             key={job.id}
-            className="bg-slate-900/60 border border-slate-800 hover:border-slate-700/80 rounded-2xl p-5 backdrop-blur-xl transition-all shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4"
+            className="bg-slate-900/60 border border-slate-800 hover:border-slate-700/80 rounded-2xl p-3.5 sm:p-5 backdrop-blur-xl transition-all shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3.5 sm:gap-4"
           >
-            <div className="flex items-start gap-4 min-w-0">
+            <div className="flex items-start gap-3 sm:gap-4 min-w-0">
               <div
-                className={`h-10 w-10 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                className={`h-9 w-9 sm:h-10 sm:w-10 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5 ${
                   isCompleted
                     ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
                     : isFailed
@@ -72,25 +72,25 @@ export function HistoryList({ jobs, onSelectJob }: HistoryListProps) {
                 }`}
               >
                 {isCompleted ? (
-                  <CheckCircle className="h-5 w-5" />
+                  <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5" />
                 ) : isFailed ? (
-                  <AlertTriangle className="h-5 w-5" />
+                  <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5" />
                 ) : (
-                  <Clock className="h-5 w-5" />
+                  <Clock className="h-4 w-4 sm:h-5 sm:w-5" />
                 )}
               </div>
 
-              <div className="min-w-0">
-                <div className="flex items-center gap-2">
-                  <h4 className="text-sm font-semibold text-white truncate">
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                  <h4 className="text-xs sm:text-sm font-semibold text-white truncate max-w-[200px] sm:max-w-none">
                     {job.metadata?.title || job.inputUrl}
                   </h4>
-                  <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-950 text-slate-400 border border-slate-800">
+                  <span className="text-[10px] sm:text-[11px] font-mono px-1.5 sm:px-2 py-0.5 rounded bg-slate-950 text-slate-400 border border-slate-800">
                     {job.id}
                   </span>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400 mt-1">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-[11px] sm:text-xs text-slate-400 mt-1">
                   <span>{formatDate(job.createdAt)}</span>
                   {job.metadata?.author && (
                     <>
@@ -125,7 +125,7 @@ export function HistoryList({ jobs, onSelectJob }: HistoryListProps) {
                 </div>
 
                 {job.result && (
-                  <p className="text-xs text-slate-200 line-clamp-1 mt-2 bg-slate-950/60 p-2 rounded-lg border border-slate-800/80">
+                  <p className="text-[11px] sm:text-xs text-slate-200 line-clamp-1 mt-2 bg-slate-950/60 p-2 rounded-lg border border-slate-800/80 break-words">
                     {job.result.amharicText ? (
                       <span className="text-amber-200">
                         🇪🇹 {job.result.amharicText}
@@ -139,7 +139,7 @@ export function HistoryList({ jobs, onSelectJob }: HistoryListProps) {
             </div>
 
             {/* Actions */}
-            <div className="flex items-center gap-2 self-end md:self-center flex-shrink-0">
+            <div className="flex items-center gap-2 w-full md:w-auto justify-end pt-2 md:pt-0 border-t md:border-t-0 border-slate-800/60 flex-shrink-0">
               {job.result && (
                 <button
                   type="button"

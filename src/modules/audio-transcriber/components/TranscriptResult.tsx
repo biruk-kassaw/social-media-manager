@@ -170,25 +170,25 @@ export function TranscriptResult({
       : result.segments;
 
   return (
-    <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 sm:p-8 backdrop-blur-xl shadow-xl space-y-6">
+    <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 sm:p-6 md:p-8 backdrop-blur-xl shadow-xl space-y-5 sm:space-y-6">
       {/* Header with badges and meta */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800/80 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-5">
         <div>
-          <div className="flex flex-wrap items-center gap-2">
-            <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-              <Languages className="h-5 w-5 text-purple-400" />
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            <h3 className="text-base sm:text-lg font-semibold text-white flex items-center gap-2">
+              <Languages className="h-5 w-5 text-purple-400 flex-shrink-0" />
               Content Result
             </h3>
 
             {result.amharicText && (
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/25 font-semibold flex items-center gap-1">
+              <span className="text-[11px] sm:text-xs px-2 sm:px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/25 font-semibold flex items-center gap-1">
                 <span>🇪🇹</span>
-                <span>አማርኛ ስክሪፕት (Amharic)</span>
+                <span>አማርኛ ስክሪፕት</span>
               </span>
             )}
 
             {result.amharicTone && (
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20 font-medium flex items-center gap-1">
+              <span className="text-[11px] sm:text-xs px-2 sm:px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20 font-medium flex items-center gap-1">
                 {result.amharicTone === "creator" && <Flame className="h-3 w-3 text-amber-400" />}
                 {result.amharicTone === "educational" && <GraduationCap className="h-3 w-3 text-sky-400" />}
                 {result.amharicTone === "formal" && <Briefcase className="h-3 w-3 text-purple-400" />}
@@ -196,13 +196,13 @@ export function TranscriptResult({
               </span>
             )}
 
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 font-medium flex items-center gap-1">
+            <span className="text-[11px] sm:text-xs px-2 sm:px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 font-medium flex items-center gap-1">
               <CheckCircle className="h-3 w-3" />
               English Transcript
             </span>
           </div>
 
-          <p className="text-xs text-slate-400 mt-1 flex flex-wrap items-center gap-3">
+          <p className="text-[11px] sm:text-xs text-slate-400 mt-1 flex flex-wrap items-center gap-2 sm:gap-3">
             {result.amharicText && (
               <>
                 <span className="text-amber-300/80 font-medium">
@@ -220,11 +220,11 @@ export function TranscriptResult({
         </div>
 
         {/* Global Actions: Refine Script & Download */}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
           <button
             type="button"
             onClick={() => setShowRefine(!showRefine)}
-            className={`px-3.5 py-2 rounded-xl text-xs font-medium flex items-center gap-1.5 transition-all shadow-sm cursor-pointer border ${
+            className={`px-3.5 py-2 rounded-xl text-xs font-medium flex items-center justify-center gap-1.5 transition-all shadow-sm cursor-pointer border ${
               showRefine
                 ? "bg-amber-500/20 text-amber-200 border-amber-500/40"
                 : "bg-slate-800/80 hover:bg-slate-800 text-amber-300 hover:text-amber-200 border-amber-500/30"
@@ -242,7 +242,7 @@ export function TranscriptResult({
           <button
             type="button"
             onClick={handleDownload}
-            className="px-3.5 py-2 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 hover:text-purple-200 border border-purple-500/30 text-xs font-medium flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
+            className="px-3.5 py-2 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 hover:text-purple-200 border border-purple-500/30 text-xs font-medium flex items-center justify-center gap-1.5 transition-all shadow-sm cursor-pointer"
           >
             <Download className="h-4 w-4" />
             <span>Download All (.txt)</span>
@@ -408,13 +408,13 @@ export function TranscriptResult({
       )}
 
       {/* Tab Selectors */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-950/70 p-1.5 rounded-xl border border-slate-800">
-        <div className="flex items-center gap-1">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-slate-950/70 p-1.5 rounded-xl border border-slate-800">
+        <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5 w-full sm:w-auto">
           {result.amharicText && (
             <button
               type="button"
               onClick={() => setActiveTab("amharic")}
-              className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
+              className={`px-3 sm:px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer flex-shrink-0 ${
                 activeTab === "amharic"
                   ? "bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-200 border border-amber-500/40 shadow-sm"
                   : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
@@ -428,28 +428,28 @@ export function TranscriptResult({
           <button
             type="button"
             onClick={() => setActiveTab("english")}
-            className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
+            className={`px-3 sm:px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer flex-shrink-0 ${
               activeTab === "english"
                 ? "bg-purple-600/20 text-purple-200 border border-purple-500/40 shadow-sm"
                 : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
             }`}
           >
             <span>🇬🇧</span>
-            <span>English Transcript</span>
+            <span>English</span>
           </button>
 
           {(result.segments?.length || result.amharicSegments?.length) ? (
             <button
               type="button"
               onClick={() => setActiveTab("segments")}
-              className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
+              className={`px-3 sm:px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer flex-shrink-0 ${
                 activeTab === "segments"
                   ? "bg-indigo-600/20 text-indigo-200 border border-indigo-500/40 shadow-sm"
                   : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
               }`}
             >
               <Clock className="h-3.5 w-3.5" />
-              <span>Timestamped Segments</span>
+              <span>Segments</span>
             </button>
           ) : null}
         </div>
@@ -459,7 +459,7 @@ export function TranscriptResult({
           <button
             type="button"
             onClick={() => handleCopy(result.amharicText!, "amharic")}
-            className="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-amber-200 text-xs font-medium border border-amber-500/30 flex items-center gap-1.5 transition-colors cursor-pointer mr-1"
+            className="w-full sm:w-auto px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-amber-200 text-xs font-medium border border-amber-500/30 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
           >
             {copiedTab === "amharic" ? (
               <>
@@ -469,7 +469,7 @@ export function TranscriptResult({
             ) : (
               <>
                 <Copy className="h-3.5 w-3.5" />
-                <span>Copy Amharic (አማርኛ)</span>
+                <span>Copy Amharic</span>
               </>
             )}
           </button>
@@ -479,7 +479,7 @@ export function TranscriptResult({
           <button
             type="button"
             onClick={() => handleCopy(result.text, "english")}
-            className="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-200 text-xs font-medium border border-slate-700 flex items-center gap-1.5 transition-colors cursor-pointer mr-1"
+            className="w-full sm:w-auto px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-200 text-xs font-medium border border-slate-700 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
           >
             {copiedTab === "english" ? (
               <>
@@ -499,11 +499,11 @@ export function TranscriptResult({
       {/* Main Content Area */}
       {activeTab === "amharic" && result.amharicText && (
         <div className="space-y-3">
-          <div className="bg-slate-950/80 border border-amber-500/20 rounded-xl p-6 font-sans leading-relaxed text-amber-50/95 text-base sm:text-lg whitespace-pre-wrap select-text shadow-inner">
+          <div className="bg-slate-950/80 border border-amber-500/20 rounded-xl p-4 sm:p-6 font-sans leading-relaxed text-amber-50/95 text-sm sm:text-base md:text-lg whitespace-pre-wrap break-words select-text shadow-inner">
             {result.amharicText}
           </div>
           <p className="text-[11px] text-slate-400 flex items-center gap-1.5">
-            <Sparkles className="h-3.5 w-3.5 text-amber-400" />
+            <Sparkles className="h-3.5 w-3.5 text-amber-400 flex-shrink-0" />
             <span>
               Localized by AI into modern conversational Amharic script (ፊደል). Click "Refine / Polish Script" to adjust style or wording.
             </span>
@@ -512,7 +512,7 @@ export function TranscriptResult({
       )}
 
       {activeTab === "english" && (
-        <div className="bg-slate-950/70 border border-slate-800/90 rounded-xl p-5 font-sans leading-relaxed text-slate-200 text-sm whitespace-pre-wrap select-text">
+        <div className="bg-slate-950/70 border border-slate-800/90 rounded-xl p-4 sm:p-5 font-sans leading-relaxed text-slate-200 text-xs sm:text-sm md:text-base whitespace-pre-wrap break-words select-text">
           {result.text}
         </div>
       )}
@@ -521,12 +521,12 @@ export function TranscriptResult({
         <div className="space-y-3">
           {/* Sub-selector for segment language if both exist */}
           {result.amharicSegments && result.segments && (
-            <div className="flex items-center gap-2 text-xs text-slate-400 pb-1">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400 pb-1">
               <span>Segment language:</span>
               <button
                 type="button"
                 onClick={() => setSegmentLang("amharic")}
-                className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
+                className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
                   segmentLang === "amharic"
                     ? "bg-amber-500/20 text-amber-300 border border-amber-500/40"
                     : "bg-slate-950 text-slate-400 hover:text-white"
@@ -537,7 +537,7 @@ export function TranscriptResult({
               <button
                 type="button"
                 onClick={() => setSegmentLang("english")}
-                className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
+                className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
                   segmentLang === "english"
                     ? "bg-purple-600/20 text-purple-300 border border-purple-500/40"
                     : "bg-slate-950 text-slate-400 hover:text-white"
@@ -548,17 +548,17 @@ export function TranscriptResult({
             </div>
           )}
 
-          <div className="space-y-2 max-h-96 overflow-y-auto pr-2">
+          <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
             {currentDisplaySegments?.map((seg) => (
               <div
                 key={seg.id}
-                className="flex items-start gap-4 p-3 rounded-lg bg-slate-950/60 border border-slate-800/80 text-sm hover:border-slate-700 transition-colors"
+                className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 p-2.5 sm:p-3 rounded-lg bg-slate-950/60 border border-slate-800/80 text-xs sm:text-sm hover:border-slate-700 transition-colors"
               >
-                <span className="font-mono text-xs text-purple-400 font-semibold px-2 py-0.5 rounded bg-purple-950/40 border border-purple-800/40 flex-shrink-0">
+                <span className="font-mono text-[11px] sm:text-xs text-purple-400 font-semibold px-2 py-0.5 rounded bg-purple-950/40 border border-purple-800/40 flex-shrink-0">
                   {seg.start}s - {seg.end}s
                 </span>
                 <p
-                  className={`text-sm ${
+                  className={`text-xs sm:text-sm break-words ${
                     segmentLang === "amharic"
                       ? "text-amber-100 font-medium"
                       : "text-slate-200"
