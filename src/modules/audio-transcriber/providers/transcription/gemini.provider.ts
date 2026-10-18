@@ -51,31 +51,20 @@ export class GeminiTranscriptionProvider implements ITranscriptionProvider {
     const mimeType = this.getMimeType(audioPath);
 
     const promptText = `
-You are an expert audio transcriber and multilingual translator specializing in English and Amharic (አማርኛ).
-Please listen to the attached audio file and perform two key tasks:
-1. Transcribe the spoken dialogue into clean, natural English (if spoken in another language, translate it to English).
-2. Translate the speech into authentic, high-quality Amharic (አማርኛ) text written in the Ge'ez script (ፊደል).
-Ensure the Amharic translation is natural, grammatically sound, and conveys the full context and nuance.
+You are an expert audio transcriber.
+Listen carefully to the attached audio file and transcribe the spoken dialogue into clean, natural English (if spoken in another language, translate the spoken dialogue accurately into natural English).
+Ensure high accuracy, proper punctuation, and precise timestamped segments.
 
 Respond strictly in valid JSON with this exact structure:
 {
   "text": "Full continuous English transcription text here.",
-  "amharicText": "ሙሉውን የአማርኛ ትርጉም እዚህ ይጻፉ።",
-  "language": "Detected spoken language (e.g. English, Spanish, Amharic, etc.)",
+  "language": "Detected spoken language (e.g. English, Amharic, Spanish, etc.)",
   "segments": [
     {
       "id": 1,
       "start": 0.0,
       "end": 3.5,
-      "text": "English segment"
-    }
-  ],
-  "amharicSegments": [
-    {
-      "id": 1,
-      "start": 0.0,
-      "end": 3.5,
-      "text": "የአማርኛ ክፍል ጽሑፍ"
+      "text": "Transcribed segment text."
     }
   ]
 }
@@ -144,9 +133,9 @@ Respond strictly in valid JSON with this exact structure:
     }
 
     try {
-      const parsed = JSON.parse(candidateText);
+      const cleaned = candidateText.replace(/```json/g, "").replace(/```/g, "").trim();
+      const parsed = JSON.parse(cleaned);
       const text = (parsed.text || "").trim();
-      const amharicText = (parsed.amharicText || "").trim();
       const detectedLanguage = parsed.language || "English";
       const isEnglish = true; // English transcript is always provided
 
@@ -159,25 +148,11 @@ Respond strictly in valid JSON with this exact structure:
           }))
         : undefined;
 
-      const amharicSegments = Array.isArray(parsed.amharicSegments)
-        ? parsed.amharicSegments.map((seg: any, idx: number) => ({
-            id: seg.id || idx + 1,
-            start: typeof seg.start === "number" ? seg.start : 0,
-            end: typeof seg.end === "number" ? seg.end : 0,
-            text: (seg.text || "").trim(),
-          }))
-        : undefined;
-
       return {
         text,
-        amharicText: amharicText || undefined,
         language: detectedLanguage,
         isEnglish,
         segments: segments && segments.length > 0 ? segments : undefined,
-        amharicSegments:
-          amharicSegments && amharicSegments.length > 0
-            ? amharicSegments
-            : undefined,
         provider: this.name,
         model: this.modelName,
         completedAt: new Date().toISOString(),

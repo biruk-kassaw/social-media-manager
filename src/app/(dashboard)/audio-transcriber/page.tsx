@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { TranscriberForm } from "@/modules/audio-transcriber/components/TranscriberForm";
 import { JobProgress } from "@/modules/audio-transcriber/components/JobProgress";
 import { TranscriptResult } from "@/modules/audio-transcriber/components/TranscriptResult";
-import { TranscriberJob } from "@/modules/audio-transcriber/types";
+import { TranscriberJob, AmharicTone, TranscriptionResult } from "@/modules/audio-transcriber/types";
 import {
   Sparkles,
   AudioWaveform,
@@ -55,14 +55,15 @@ export default function AudioTranscriberPage() {
 
   const handleSubmit = async (
     url: string,
-    provider: "openai" | "groq" | "gemini" | "mock"
+    provider: "openai" | "groq" | "gemini" | "mock",
+    tone: AmharicTone = "creator"
   ) => {
     setIsSubmitting(true);
     try {
       const res = await fetch("/api/audio-transcriber", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url, provider }),
+        body: JSON.stringify({ url, provider, tone }),
       });
 
       const data = await res.json();
@@ -78,7 +79,16 @@ export default function AudioTranscriberPage() {
 
   const handleRetry = () => {
     if (currentJob) {
-      handleSubmit(currentJob.inputUrl, "mock");
+      handleSubmit(currentJob.inputUrl, "mock", currentJob.tone || "creator");
+    }
+  };
+
+  const handleResultUpdated = (updatedResult: TranscriptionResult) => {
+    if (currentJob) {
+      setCurrentJob({
+        ...currentJob,
+        result: updatedResult,
+      });
     }
   };
 
@@ -103,6 +113,8 @@ export default function AudioTranscriberPage() {
         <TranscriptResult
           result={currentJob.result}
           metadata={currentJob.metadata}
+          jobId={currentJob.id}
+          onResultUpdated={handleResultUpdated}
         />
       )}
     </div>

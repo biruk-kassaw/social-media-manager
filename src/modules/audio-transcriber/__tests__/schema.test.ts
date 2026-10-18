@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   extractTikTokUrl,
   transcribeRequestSchema,
+  refineScriptSchema,
 } from "../schemas/transcriber.schema.js";
 
 describe("TikTok URL extraction and schema validation", () => {
@@ -36,14 +37,40 @@ describe("TikTok URL extraction and schema validation", () => {
     assert.throws(() => extractTikTokUrl("not a url"));
   });
 
-  it("validates request schema correctly", () => {
+  it("validates request schema correctly and defaults tone to creator", () => {
     const valid = transcribeRequestSchema.safeParse({
       url: "https://www.tiktok.com/@creator/video/123456789",
     });
     assert.equal(valid.success, true);
+    if (valid.success) {
+      assert.equal(valid.data.tone, "creator");
+    }
+
+    const withFormalTone = transcribeRequestSchema.safeParse({
+      url: "https://www.tiktok.com/@creator/video/123456789",
+      tone: "formal",
+    });
+    assert.equal(withFormalTone.success, true);
+    if (withFormalTone.success) {
+      assert.equal(withFormalTone.data.tone, "formal");
+    }
 
     const invalid = transcribeRequestSchema.safeParse({
       url: "https://google.com",
+    });
+    assert.equal(invalid.success, false);
+  });
+
+  it("validates refineScriptSchema correctly", () => {
+    const valid = refineScriptSchema.safeParse({
+      text: "Sample English transcript text",
+      tone: "educational",
+      customInstructions: "Add punchier hook",
+    });
+    assert.equal(valid.success, true);
+
+    const invalid = refineScriptSchema.safeParse({
+      text: "",
     });
     assert.equal(invalid.success, false);
   });

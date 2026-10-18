@@ -26,14 +26,18 @@ export function JobProgress({ job, onRetry }: JobProgressProps) {
     {
       label: "Audio Extracted",
       active: job.progress >= 25,
-      done: job.progress >= 60,
+      done: job.progress >= 50,
     },
     {
-      label: "Whisper Transcription",
-      active: job.progress >= 60,
-      done: job.progress >= 95,
+      label: "Speech Transcription",
+      active: job.progress >= 50,
+      done: job.progress >= 80,
     },
-    { label: "Transcript Ready", active: isCompleted, done: isCompleted },
+    {
+      label: "Amharic Localization",
+      active: job.progress >= 80,
+      done: isCompleted,
+    },
   ];
 
   return (

@@ -1,7 +1,8 @@
 import { audioExtractionService } from "./audio-extraction.service";
 import { transcriptionService } from "./transcription.service";
+import { amharicLocalizationService } from "./amharic-localization.service";
 import { jobManager } from "./job-manager.service";
-import { TranscriberJob } from "../types";
+import { TranscriberJob, AmharicTone } from "../types";
 
 export class TranscriptionPipeline {
   /**
@@ -11,14 +12,21 @@ export class TranscriptionPipeline {
     url: string,
     options?: {
       provider?: "openai" | "groq" | "gemini" | "mock";
+      tone?: AmharicTone;
     }
   ): Promise<TranscriberJob> {
     const job = await jobManager.createJob(url);
 
+    if (options?.tone) {
+      await jobManager.updateJob(job.id, { tone: options.tone });
+    }
+
     // Run pipeline asynchronously without blocking HTTP response
-    this.runPipeline(job.id, url, options?.provider).catch((err) => {
-      console.error(`Pipeline error on job ${job.id}:`, err);
-    });
+    this.runPipeline(job.id, url, options?.provider, options?.tone).catch(
+      (err) => {
+        console.error(`Pipeline error on job ${job.id}:`, err);
+      }
+    );
 
     return job;
   }
@@ -26,9 +34,11 @@ export class TranscriptionPipeline {
   private async runPipeline(
     jobId: string,
     url: string,
-    provider?: "openai" | "groq" | "gemini" | "mock"
+    provider?: "openai" | "groq" | "gemini" | "mock",
+    tone?: AmharicTone
   ): Promise<void> {
     let cleanupFn: (() => Promise<void>) | undefined;
+    const selectedTone = tone || "creator";
 
     try {
       // Step 1: Extraction
@@ -43,7 +53,7 @@ export class TranscriptionPipeline {
 
       await jobManager.updateJob(jobId, {
         status: "extracting",
-        progress: 55,
+        progress: 50,
         currentStepMessage: `Audio extracted: "${extracted.title}". Preparing transcription...`,
         metadata: {
           title: extracted.title,
@@ -59,10 +69,10 @@ export class TranscriptionPipeline {
         },
       });
 
-      // Step 2: Transcription
+      // Step 2: Speech-to-Text Transcription
       await jobManager.updateJob(jobId, {
         status: "transcribing",
-        progress: 75,
+        progress: 68,
         currentStepMessage: `Transcribing audio to English text with ${provider || "default"} model...`,
       });
 
@@ -74,15 +84,33 @@ export class TranscriptionPipeline {
         }
       );
 
-      // Step 3: Completion & Cleanup
+      // Clean up extracted temp audio file immediately after transcription
       if (cleanupFn) {
         await cleanupFn();
+        cleanupFn = undefined;
       }
+
+      // Step 3: Decoupled Amharic Social Media Script Localization
+      await jobManager.updateJob(jobId, {
+        status: "localizing",
+        progress: 85,
+        currentStepMessage: `Localizing script into authentic Amharic (${selectedTone} style)...`,
+      });
+
+      const localization = await amharicLocalizationService.localize({
+        text: result.text,
+        segments: result.segments,
+        tone: selectedTone,
+      });
+
+      result.amharicText = localization.amharicText;
+      result.amharicSegments = localization.amharicSegments;
+      result.amharicTone = localization.amharicTone;
 
       await jobManager.updateJob(jobId, {
         status: "completed",
         progress: 100,
-        currentStepMessage: "Transcription completed successfully.",
+        currentStepMessage: "Transcription and Amharic script localization completed successfully.",
         result,
       });
     } catch (err: any) {

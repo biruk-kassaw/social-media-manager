@@ -19,8 +19,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { url, provider } = parseResult.data;
-    const job = await transcriptionPipeline.startJob(url, { provider });
+    const { url, provider, tone } = parseResult.data;
+    const job = await transcriptionPipeline.startJob(url, { provider, tone });
 
     return NextResponse.json({ success: true, job }, { status: 202 });
   } catch (err: any) {
@@ -36,6 +36,23 @@ export async function GET() {
   return NextResponse.json({
     status: "ok",
     supportedPlatforms: ["tiktok"],
+    tones: [
+      {
+        id: "creator",
+        name: "Conversational Creator (ፈጣሪ / ማራኪ አቀራረብ)",
+        description: "Modern, high-energy Addis Ababa creator style for TikTok/Reels",
+      },
+      {
+        id: "educational",
+        name: "Informative / Educational (ትምህርታዊ / ማብራሪያ)",
+        description: "Clear, explanatory breakdown of concepts",
+      },
+      {
+        id: "formal",
+        name: "Formal / Professional (መደበኛ / ቢዝነስ)",
+        description: "Respectful, broadcast-ready business tone",
+      },
+    ],
     providers: [
       {
         id: "gemini",

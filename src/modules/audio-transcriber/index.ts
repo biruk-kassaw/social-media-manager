@@ -4,5 +4,6 @@ export * from "./services/audio-extraction.service";
 export * from "./services/transcription.service";
 export * from "./services/job-manager.service";
 export * from "./services/transcription-pipeline";
+export * from "./services/amharic-localization.service";
 export * from "./providers/transcription/types";
 export * from "./providers/audio-extractor/types";

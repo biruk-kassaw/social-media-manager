@@ -8,12 +8,18 @@ import {
   HelpCircle,
   Cpu,
   Video,
+  Flame,
+  GraduationCap,
+  Briefcase,
+  Languages,
 } from "lucide-react";
+import { AmharicTone } from "../types";
 
 interface TranscriberFormProps {
   onSubmit: (
     url: string,
-    provider: "openai" | "groq" | "gemini" | "mock"
+    provider: "openai" | "groq" | "gemini" | "mock",
+    tone: AmharicTone
   ) => Promise<void>;
   isLoading: boolean;
 }
@@ -23,6 +29,7 @@ export function TranscriberForm({ onSubmit, isLoading }: TranscriberFormProps) {
   const [provider, setProvider] = useState<
     "openai" | "groq" | "gemini" | "mock"
   >("gemini");
+  const [tone, setTone] = useState<AmharicTone>("creator");
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,7 +42,7 @@ export function TranscriberForm({ onSubmit, isLoading }: TranscriberFormProps) {
     }
 
     try {
-      await onSubmit(url.trim(), provider);
+      await onSubmit(url.trim(), provider, tone);
     } catch (err: any) {
       setError(err?.message || "Failed to start extraction");
     }
@@ -153,6 +160,117 @@ export function TranscriberForm({ onSubmit, isLoading }: TranscriberFormProps) {
           </button>
         </div>
 
+        {/* Amharic Tone & Style Selection */}
+        <div className="pt-2 border-t border-slate-800/80">
+          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 flex items-center justify-between">
+            <span className="flex items-center gap-1.5 text-amber-300">
+              <Languages className="h-4 w-4" />
+              Amharic Script Localization Style (የአማርኛ ስክሪፕት አቀራረብ)
+            </span>
+            <span className="text-[11px] text-slate-500 font-normal">
+              Two-step AI localization
+            </span>
+          </label>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <button
+              type="button"
+              disabled={isLoading}
+              onClick={() => setTone("creator")}
+              className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                tone === "creator"
+                  ? "bg-gradient-to-br from-amber-500/20 via-orange-500/10 to-transparent border-amber-500/60 shadow-md shadow-amber-500/10 ring-1 ring-amber-500/40"
+                  : "bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400"
+              }`}
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <Flame
+                  className={`h-4 w-4 ${
+                    tone === "creator" ? "text-amber-400" : "text-slate-400"
+                  }`}
+                />
+                <span
+                  className={`text-xs font-bold ${
+                    tone === "creator" ? "text-amber-200" : "text-slate-300"
+                  }`}
+                >
+                  Conversational Creator
+                </span>
+              </div>
+              <p className="text-[11px] text-amber-300/80 font-medium">
+                ፈጣሪ / ማራኪ አቀራረብ
+              </p>
+              <p className="text-[10px] text-slate-400 mt-1 leading-snug">
+                Fast hooks, lively Addis Ababa conversational rhythm, perfect for TikTok & Reels.
+              </p>
+            </button>
+
+            <button
+              type="button"
+              disabled={isLoading}
+              onClick={() => setTone("educational")}
+              className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                tone === "educational"
+                  ? "bg-gradient-to-br from-sky-500/20 via-indigo-500/10 to-transparent border-sky-500/60 shadow-md shadow-sky-500/10 ring-1 ring-sky-500/40"
+                  : "bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400"
+              }`}
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <GraduationCap
+                  className={`h-4 w-4 ${
+                    tone === "educational" ? "text-sky-400" : "text-slate-400"
+                  }`}
+                />
+                <span
+                  className={`text-xs font-bold ${
+                    tone === "educational" ? "text-sky-200" : "text-slate-300"
+                  }`}
+                >
+                  Informative / Educational
+                </span>
+              </div>
+              <p className="text-[11px] text-sky-300/80 font-medium">
+                ትምህርታዊ / ማብራሪያ
+              </p>
+              <p className="text-[10px] text-slate-400 mt-1 leading-snug">
+                Clear concepts breakdown, friendly educational Amharic, structured explanation.
+              </p>
+            </button>
+
+            <button
+              type="button"
+              disabled={isLoading}
+              onClick={() => setTone("formal")}
+              className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                tone === "formal"
+                  ? "bg-gradient-to-br from-purple-500/20 via-indigo-500/10 to-transparent border-purple-500/60 shadow-md shadow-purple-500/10 ring-1 ring-purple-500/40"
+                  : "bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400"
+              }`}
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <Briefcase
+                  className={`h-4 w-4 ${
+                    tone === "formal" ? "text-purple-400" : "text-slate-400"
+                  }`}
+                />
+                <span
+                  className={`text-xs font-bold ${
+                    tone === "formal" ? "text-purple-200" : "text-slate-300"
+                  }`}
+                >
+                  Formal / Professional
+                </span>
+              </div>
+              <p className="text-[11px] text-purple-300/80 font-medium">
+                መደበኛ / ቢዝነስ
+              </p>
+              <p className="text-[10px] text-slate-400 mt-1 leading-snug">
+                Respectful broadcast grade, polished phrasing for business and corporate delivery.
+              </p>
+            </button>
+          </div>
+        </div>
+
         {/* Submit action */}
         <div className="pt-2 flex justify-end">
           <button
@@ -168,7 +286,7 @@ export function TranscriberForm({ onSubmit, isLoading }: TranscriberFormProps) {
             ) : (
               <>
                 <Sparkles className="h-4 w-4" />
-                <span>Extract Audio & Transcribe</span>
+                <span>Extract Audio & Localize to Amharic</span>
                 <ArrowRight className="h-4 w-4 ml-1" />
               </>
             )}

@@ -60,7 +60,27 @@ export const transcribeRequestSchema = z.object({
       }
     ),
   provider: z.enum(["openai", "groq", "gemini", "mock"]).optional().default("mock"),
+  tone: z.enum(["creator", "educational", "formal"]).optional().default("creator"),
   targetLanguage: z.literal("en").optional().default("en"),
 });
 
 export type TranscribeRequestInput = z.infer<typeof transcribeRequestSchema>;
+
+export const refineScriptSchema = z.object({
+  text: z.string().min(1, "Original transcript text is required"),
+  segments: z
+    .array(
+      z.object({
+        id: z.number(),
+        start: z.number(),
+        end: z.number(),
+        text: z.string(),
+      })
+    )
+    .optional(),
+  tone: z.enum(["creator", "educational", "formal"]).default("creator"),
+  customInstructions: z.string().optional(),
+  jobId: z.string().optional(),
+});
+
+export type RefineScriptInput = z.infer<typeof refineScriptSchema>;
